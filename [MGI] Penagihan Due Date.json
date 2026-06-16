@@ -1,0 +1,814 @@
+{
+  "name": "[MGI] Penagihan Due Date",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "odoo-penagihan",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -240,
+        96
+      ],
+      "id": "endro631-e29f-4149-b7d6-fcb5a36c5cb7",
+      "name": "Webhook",
+      "webhookId": "aiexpert-b2cb-406f-b173-cf1aec527799",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c721e641-1f1a-4275-84af-7a4573f1e0c6",
+              "name": "body.id",
+              "value": "={{ $('Webhook').item.json.body.id }}",
+              "type": "string"
+            },
+            {
+              "id": "f93f8b65-5308-4686-a643-0858f1b608c7",
+              "name": "body.invoice_number",
+              "value": "={{ $('Webhook').item.json.body.invoice_number }}",
+              "type": "string"
+            },
+            {
+              "id": "decaf179-b957-4f11-812f-08063ed54865",
+              "name": "body.partner_name",
+              "value": "={{ $('Webhook').item.json.body.partner_name }}",
+              "type": "string"
+            },
+            {
+              "id": "a87f37ac-6954-4c36-8fd2-14c3a14cc811",
+              "name": "body.partner_mobile",
+              "value": "={{ $('Webhook').item.json.body.partner_mobile }}",
+              "type": "string"
+            },
+            {
+              "id": "54786f86-bae2-4068-8770-dcb4ff562b43",
+              "name": "body.amount_total",
+              "value": "={{ 'Rp ' + Number($('Webhook').item.json.body.amount_total).toLocaleString('id-ID') + ',-' }}",
+              "type": "string"
+            },
+            {
+              "id": "b2ec3044-4cd9-4400-b524-e9a8aaa6284e",
+              "name": "body.due_date",
+              "value": "={{ new Date($('Webhook').item.json.body.due_date).toLocaleDateString('id-ID', {\n  day: 'numeric',\n  month: 'long',\n  year: 'numeric'\n}) }}",
+              "type": "string"
+            },
+            {
+              "id": "8b90df9b-4ef3-40e7-8305-d4e8576be104",
+              "name": "body.days_until_due",
+              "value": "={{ $('Webhook').item.json.body.days_until_due }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        96
+      ],
+      "id": "c237268d-b760-40cd-84a7-4d14dfe116ff",
+      "name": "Edit Fields",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2e03fe02-1f59-4e68-bfdb-ecf8a3f43fa6",
+              "leftValue": "={{ $json.body.days_until_due }}",
+              "rightValue": 2,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        96
+      ],
+      "id": "1a91a959-d725-470a-a5fc-ac8df755501e",
+      "name": "If",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1OSMEwjxdvuRv0zCJxZfSnEH_Fz2lGG1JfeVgnf_PyC0",
+          "mode": "list",
+          "cachedResultName": "Create Product Test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OSMEwjxdvuRv0zCJxZfSnEH_Fz2lGG1JfeVgnf_PyC0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1627897325,
+          "mode": "list",
+          "cachedResultName": "Tagih Due Date",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OSMEwjxdvuRv0zCJxZfSnEH_Fz2lGG1JfeVgnf_PyC0/edit#gid=1627897325"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "Terkirim",
+            "ID": "={{ $('Webhook').item.json.body.id }}",
+            "Sent Date": "={{ $now.setZone('Asia/Jakarta').toFormat('yyyy-MM-dd HH:mm:ss') }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Inv Number",
+              "displayName": "Inv Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Customer",
+              "displayName": "Customer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Nomer WA",
+              "displayName": "Nomer WA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Nominal",
+              "displayName": "Nominal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Due Date",
+              "displayName": "Due Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Days Until Due",
+              "displayName": "Days Until Due",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sent Date",
+              "displayName": "Sent Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1328,
+        96
+      ],
+      "id": "f070f923-1a58-42b1-87b7-1c1fa3860080",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ENDROVw2AJxIFS2E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1OSMEwjxdvuRv0zCJxZfSnEH_Fz2lGG1JfeVgnf_PyC0",
+          "mode": "list",
+          "cachedResultName": "Create Product Test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OSMEwjxdvuRv0zCJxZfSnEH_Fz2lGG1JfeVgnf_PyC0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1627897325,
+          "mode": "list",
+          "cachedResultName": "Tagih Due Date",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OSMEwjxdvuRv0zCJxZfSnEH_Fz2lGG1JfeVgnf_PyC0/edit#gid=1627897325"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "ID",
+              "lookupValue": "={{ $json.body.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -16,
+        96
+      ],
+      "id": "7cff77de-120f-4da7-9a2a-73bdf9423776",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ENDROVw2AJxIFS2E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a8dde8c0-ed17-46a1-b84e-66b74defc1c9",
+              "leftValue": "={{ $json.ID }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        96
+      ],
+      "id": "bdc572d4-8c07-47a4-be79-c1fd845152c1",
+      "name": "If1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1OSMEwjxdvuRv0zCJxZfSnEH_Fz2lGG1JfeVgnf_PyC0",
+          "mode": "list",
+          "cachedResultName": "Create Product Test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OSMEwjxdvuRv0zCJxZfSnEH_Fz2lGG1JfeVgnf_PyC0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1627897325,
+          "mode": "list",
+          "cachedResultName": "Tagih Due Date",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OSMEwjxdvuRv0zCJxZfSnEH_Fz2lGG1JfeVgnf_PyC0/edit#gid=1627897325"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $('Webhook').item.json.body.id }}",
+            "Inv Number": "={{ $('Webhook').item.json.body.invoice_number }}",
+            "Customer": "={{ $('Webhook').item.json.body.partner_name }}",
+            "Nomer WA": "={{ $('Webhook').item.json.body.partner_mobile }}",
+            "Nominal": "={{ $('Webhook').item.json.body.amount_total }}",
+            "Due Date": "={{ $('Webhook').item.json.body.due_date }}",
+            "Days Until Due": "={{ $('Webhook').item.json.body.days_until_due }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Inv Number",
+              "displayName": "Inv Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Customer",
+              "displayName": "Customer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nomer WA",
+              "displayName": "Nomer WA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nominal",
+              "displayName": "Nominal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Due Date",
+              "displayName": "Due Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Days Until Due",
+              "displayName": "Days Until Due",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        432,
+        192
+      ],
+      "id": "db104d3c-4a29-4520-9777-8f96940af8ad",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ENDROVw2AJxIFS2E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1OSMEwjxdvuRv0zCJxZfSnEH_Fz2lGG1JfeVgnf_PyC0",
+          "mode": "list",
+          "cachedResultName": "Create Product Test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OSMEwjxdvuRv0zCJxZfSnEH_Fz2lGG1JfeVgnf_PyC0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1627897325,
+          "mode": "list",
+          "cachedResultName": "Tagih Due Date",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OSMEwjxdvuRv0zCJxZfSnEH_Fz2lGG1JfeVgnf_PyC0/edit#gid=1627897325"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $('Webhook').item.json.body.id }}",
+            "Customer": "={{ $('Webhook').item.json.body.partner_name }}",
+            "Inv Number": "={{ $('Webhook').item.json.body.invoice_number }}",
+            "Nomer WA": "={{ $('Webhook').item.json.body.partner_mobile }}",
+            "Nominal": "={{ $('Webhook').item.json.body.amount_total }}",
+            "Due Date": "={{ $('Webhook').item.json.body.due_date }}",
+            "Days Until Due": "={{ $('Webhook').item.json.body.days_until_due }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Inv Number",
+              "displayName": "Inv Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Customer",
+              "displayName": "Customer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nomer WA",
+              "displayName": "Nomer WA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nominal",
+              "displayName": "Nominal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Due Date",
+              "displayName": "Due Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Days Until Due",
+              "displayName": "Days Until Due",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        432,
+        0
+      ],
+      "id": "5f0c4156-1cfe-4259-af53-2dba679631ca",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ENDROVw2AJxIFS2E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "899780356548437",
+        "recipientPhoneNumber": "={{ $json.body.partner_mobile }}",
+        "template": "tagihan_jatuh_tempo|id",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $('Webhook').item.json.body.partner_name }}"
+                  },
+                  {
+                    "text": "={{ $('Webhook').item.json.body.invoice_number }}"
+                  },
+                  {
+                    "text": "={{ $('Edit Fields').item.json.body.amount_total }}"
+                  },
+                  {
+                    "text": "={{ $('Edit Fields').item.json.body.due_date }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        1104,
+        96
+      ],
+      "id": "ca88fa86-47c8-4a15-bc63-8418dab8bd4b",
+      "name": "Send template",
+      "webhookId": "6f7f6378-6dd1-483c-b438-abfc25693957",
+      "alwaysOutputData": true,
+      "credentials": {
+        "whatsAppApi": {
+          "id": "eNdRo42GOH3L1oKB",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "899780356548437",
+        "recipientPhoneNumber": "={{ '6285189889978' }}",
+        "template": "tagihan_jatuh_tempo|id",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $('Webhook').item.json.body.partner_name }}"
+                  },
+                  {
+                    "text": "={{ $('Webhook').item.json.body.invoice_number }}"
+                  },
+                  {
+                    "text": "={{ $('Edit Fields').item.json.body.amount_total }}"
+                  },
+                  {
+                    "text": "={{ $('Edit Fields').item.json.body.due_date }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        1552,
+        96
+      ],
+      "id": "ce4cdf70-7255-4118-b7a6-7cb663a95031",
+      "name": "Send template2",
+      "webhookId": "6f7f6378-6dd1-483c-b438-abfc25693957",
+      "alwaysOutputData": true,
+      "credentials": {
+        "whatsAppApi": {
+          "id": "eNdRo42GOH3L1oKB",
+          "name": "WhatsApp account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        []
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send template2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send template": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "Asia/Bangkok"
+  },
+  "versionId": "d0224613-7f93-464b-8745-db06c3896839",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c983ca3898312cac2eb6caeedaa5b7c1b1494fa312cbe376b32f68e2fdf492bd"
+  },
+  "id": "37qtjQ4AuE8MVfgX",
+  "tags": []
+}
