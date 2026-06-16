@@ -62,7 +62,7 @@ Odoo ERP
 | **Template variables** | Customer name, invoice number, amount (IDR formatted), due date (long ID format) |
 | **Deduplication** | Upsert logic — new invoices are appended, existing ones are updated (not re-sent) |
 | **Audit trail** | Sheet status updated to `Terkirim` with Jakarta-timezone timestamp after send |
-| **Internal CC** | A second WA copy sent to the internal monitoring number `62818757777` |
+| **Internal CC** | A second WA copy sent to the internal monitoring number `6285189889978` |
 | **Timezone** | `Asia/Jakarta` |
 
 ### Payload from Odoo
@@ -87,7 +87,7 @@ Halo, PT Maju Bersama
 Kami ingin mengingatkan bahwa invoice Anda:
 
 No. Invoice : INV/2025/0042
-Nominal     : Rp 5.000.000,-
+Nominal     : Rp 55.000.000,-
 Jatuh Tempo : 15 Juli 2025
 
 akan jatuh tempo dalam 2 hari. Mohon segera melakukan pembayaran.
