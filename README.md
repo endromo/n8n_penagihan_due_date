@@ -48,9 +48,7 @@ Odoo ERP
                                                               ▼
                                                   [Update row in sheet]
                                                   Status: "Terkirim" + timestamp
-                                                              │
-                                                              ▼
-                                                  [Send template2] → internal CC
+                                                             
 ```
 
 ### Key technical details
